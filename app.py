@@ -28,7 +28,14 @@ def predict_api():
     print(output[0]) #will be in a 2d array, pick first value
     return jsonify(output[0])
 
+@app.route('/predict', methods=['POST'])
+def predict():
+    input_data=[float(x) for x in request.form.values()]
+    final_input = scaler.transform(np.array(input_data).reshape(1,-1))
+    print(final_input)
+    output = regression_model.predict(final_input)[0]
+    return render_template('home.html', prediction_output="The House price predicted house is {}".format(output))
+
 if __name__ == "__main__":
     app.run(debug=True)
 
-    
